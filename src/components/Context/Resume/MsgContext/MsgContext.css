@@ -1,18 +1,43 @@
-.msgTitle:hover {
-    border: 1px dashed #1890ff;
-}
-
 .msgTitle {
     width:100%;
     padding-bottom: 5px;
     padding-top: 5px;
     border-bottom: 2px solid #2081CE;
     height: auto;
+    position: relative;
+}
+
+.msgTitle .msgTitle-option {
+    position: absolute;
+    top: 14px;
+    right: 0;
+}
+
+.msgTitle .msgTitle-option .optionAdd {
+    border: 0;
+    background-color: rgb(142, 209, 41);
+    color: #fff;
+}
+
+.msgTitle .msgTitle-option .optionAdd:hover {
+    cursor: pointer;
+    background-color: rgb(156, 230, 45);
+}
+
+.msgTitle .msgTitle-option .optionDel {
+    border: 0;
+    background-color: rgb(97, 96, 96);
+    color: #fff;
+}
+
+.msgTitle .msgTitle-option .optionDel:hover {
+    cursor:pointer;
+    background-color: rgb(121, 120, 120);
 }
 
 .msgTitle span{
     color: #2081CE;
-    font-size: 17px !important;
+    font-size: 19px !important;
     font-weight: 900 !important;
 }
 
@@ -20,7 +45,15 @@
     width: 100%;
 }
 
-.msgContext:hover {
+.msgContext-title:hover {
+    border: 1px dashed #2081CE;
+}
+
+.msgContext-title {
+    position: relative;
+}
+
+.msgContext-title-msgDetail:hover {
     border: 1px dashed #2081CE;
 }
 
@@ -35,8 +68,14 @@
     font-weight: 700;
 }
 
-.msgContext .msgDetail {
+.msgContext .msgContext-title-msgDetail {
     margin-top: 8px;
     margin-bottom: 8px;
     padding-left: 20px;
+}
+
+.msgContext-detail {
+    display: block;
+    width: 100%;
+    min-height: 150px;
 }

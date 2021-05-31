@@ -1,9 +1,9 @@
 .context .context-center .resume {
-    width: 820px;
+    width: 785px;
     padding: 50px;
     border: 1px solid gray;
     box-shadow: 0px 0px 3px rgba(128, 128, 128, 0.7);
-    min-height: 1150px;
+    min-height: 1080px;
 }
 
 .context .context-center .resume span:focus {
@@ -15,10 +15,42 @@
 }
 
 .resume span {
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 500;
 }
 
 .resume span:hover {
     border: 2px dashed rgba(33, 219, 33, 0.74);
+}
+
+
+.controlResume {
+    position: fixed;
+    top: 70px;
+    right:210px;
+    box-shadow: 0px 0px 4px gray;
+    width: 200px;
+    min-height: 600px;
+    background-color: rgb(240, 240, 240);
+    text-align: center;
+}
+
+.controlResume .exportResume {
+    border: 0;
+    background-color: #1890ff;
+    width: 150px;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 15px;
+    color: rgb(223, 223, 223);
+    font-size: 18px;
+    box-shadow: 2px 2px 3px gray;
+}
+
+.controlResume .exportResume:hover {
+    cursor: pointer;
+}
+
+.controlResume .exportResume:active {
+    box-shadow: 1px 1px 2px gray;
 }

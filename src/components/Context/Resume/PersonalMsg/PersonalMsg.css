@@ -6,8 +6,9 @@
 
 .personName {
     display: inline-block;
-    font-size: 22px !important;
+    font-size: 25px !important;
     margin-bottom: 8px;
+    font-weight: 600;
 }
 
 .myPhoto {

@@ -8,6 +8,10 @@
     animation-fill-mode: forwards;
 }
 
+.hidden {
+    display: none;
+}
+
 @keyframes btFocus {
     from {background-color: rgb(52, 182, 233);}
     to {background-color: #1890ff;}
