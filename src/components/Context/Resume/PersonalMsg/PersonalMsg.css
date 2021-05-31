@@ -1,0 +1,27 @@
+
+.personalMsg {
+    overflow: hidden;
+    padding: 2px;
+}
+
+.personName {
+    display: inline-block;
+    font-size: 22px !important;
+    margin-bottom: 8px;
+}
+
+.myPhoto {
+    float: right;
+    margin-right: 10px;
+    width: 95px;
+    height: 120px;
+    background-color: skyblue;
+}
+
+.personDetails {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-right: 1px solid lightgray;
+    margin-top: 5px;
+}

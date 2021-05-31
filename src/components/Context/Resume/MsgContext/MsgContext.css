@@ -1,0 +1,42 @@
+.msgTitle:hover {
+    border: 1px dashed #1890ff;
+}
+
+.msgTitle {
+    width:100%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-bottom: 2px solid #2081CE;
+    height: auto;
+}
+
+.msgTitle span{
+    color: #2081CE;
+    font-size: 17px !important;
+    font-weight: 900 !important;
+}
+
+.msgContext {
+    width: 100%;
+}
+
+.msgContext:hover {
+    border: 1px dashed #2081CE;
+}
+
+.msgContext .msgContext-title {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.msgContext .msgContext-title span {
+    display: inline-block;
+    font-weight: 700;
+}
+
+.msgContext .msgDetail {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-left: 20px;
+}
