@@ -1,9 +1,9 @@
 import React, { Component, Fragment} from 'react'
 import PersonalMsg from './PersonalMsg/PersonalMsg'
 import MsgContext from './MsgContext/MsgContext'
-import './Resume.css'
+import './FirstModule.css'
 
-export default class Resume extends Component {
+export default class FirstModule extends Component {
 
     state = {
         category: [
@@ -34,7 +34,13 @@ export default class Resume extends Component {
 
     componentDidMount() {
         this.exportBt.onclick = () => {
-            window.print()
+            window.print(1,7)
+        }
+        window.onbeforeprint = () => {
+            this.resume.className += ' beforeExport';
+        }
+        window.onafterprint = () => {
+            this.resume.className = this.resume.className.replace('beforeExport', '')
         }
     }
 
@@ -67,7 +73,7 @@ export default class Resume extends Component {
     render() {
         return (
             <Fragment>
-                <div className="resume">
+                <div className="resume" ref={(v) => {this.resume = v}}>
                     <PersonalMsg />
                     {
                         this.state.category.map((v) => {

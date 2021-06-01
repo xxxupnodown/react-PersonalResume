@@ -1,0 +1,59 @@
+.resumeModuleContainer {
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.resumeModuleContainer ul {
+    list-style: none;
+    margin: 20px 5px 0 0;
+    overflow: hidden;
+}
+
+.resumeModuleContainer ul li {
+    float: left;
+    margin: 30px;
+}
+
+.resumeModuleContainer ul li p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 550;
+    color: #4b4b4b;
+}
+
+.resumeModuleContainer ul li .resumeModDrop {
+    width: 200px;
+    height: 270px;
+    background-color: turquoise;
+    box-shadow: 1px 1px 5px gray;
+    border-radius: 4px;
+    position:relative;
+}
+
+.resumeModuleContainer ul li .resumeModDrop .resumeModMirror {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(184, 184, 184, 0.2),rgba(255, 255, 255, 0.2) 65%, rgba(184, 184, 184, 0.2));
+    z-index: 30;
+}
+
+.resumeModuleContainer ul li .resumeModDrop .resumeModMirror:hover {
+    animation: changePicMirror 0.5s;
+    animation-fill-mode: forwards; 
+}
+
+.resumeModuleContainer ul li .resumeModDrop .resumeModFloor {
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    background: linear-gradient(rgba(219, 219, 219, 0.3),rgba(255, 255, 255, 0));
+    z-index: 3;
+}
+
+.resumeModuleContainer ul li .resumeModDrop img {
+    width: 200px;
+    height: 270px;
+}

@@ -24,22 +24,22 @@ export default class Content extends Component {
                 <div className="header-center" >
                     <ul>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="index">
+                            <NavLink className="nav-router" to="/index">
                                 首页
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="group">
+                            <NavLink className="nav-router" to="/group">
                                 部落
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="article">
+                            <NavLink className="nav-router" to="/article">
                                 帖子
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="resume">
+                            <NavLink className="nav-router" to="/resume">
                                 简历制作 
                             </NavLink>
                         </li>
