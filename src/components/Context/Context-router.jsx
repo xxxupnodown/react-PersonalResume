@@ -1,8 +1,9 @@
 import React, { Component, lazy, Suspense} from 'react'
-import {Route, Switch, Redirect} from 'react-router-dom'
+import {Route, Redirect} from 'react-router-dom'
 import Load from '../Load/Load'
 
 const Resume = lazy(() => import('./Resume'))
+const Index = lazy(() => import('./Index'))
 const FirstResume = lazy(() => import('./Resume/FristResumeModule/FirstModule'))
 
 export default class Header extends Component {
@@ -10,9 +11,9 @@ export default class Header extends Component {
         return (
             <div id="context" className="context">
                 <div className="context-center" >
-                    <Route path="/index">
-                        index
-                    </Route>
+                    <Suspense fallback={<Load />} >  
+                        <Route path="/index" component={Index} />
+                    </Suspense>
                     <Route path="/group">
                         group
                     </Route>
@@ -25,7 +26,7 @@ export default class Header extends Component {
                     <Suspense fallback={<Load />} >    
                         <Route path="/resume/module1" component={FirstResume} />
                     </Suspense>
-                    <Redirect to='/' />
+                    <Redirect to='/index' />
                 </div>
             </div>
         )

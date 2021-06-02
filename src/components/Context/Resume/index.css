@@ -6,13 +6,13 @@
 
 .resumeModuleContainer ul {
     list-style: none;
-    margin: 20px 5px 0 0;
+    margin: 20px 50px 20px 50px;
     overflow: hidden;
 }
 
 .resumeModuleContainer ul li {
     float: left;
-    margin: 30px;
+    margin: 40px;
 }
 
 .resumeModuleContainer ul li p {
