@@ -26,7 +26,7 @@ export default class Header extends Component {
                     <Suspense fallback={<Load />} >    
                         <Route path="/resume/module1" component={FirstResume} />
                     </Suspense>
-                    <Redirect to='/index' />
+                    {/* <Redirect to='/index' /> */}
                 </div>
             </div>
         )

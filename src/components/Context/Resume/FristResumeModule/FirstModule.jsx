@@ -34,7 +34,14 @@ export default class FirstModule extends Component {
 
     componentDidMount() {
         this.exportBt.onclick = () => {
-            window.print(1,7)
+            // window.print()
+            let dom = document.querySelector('.resume')
+            let newWindow = window.open()
+            newWindow.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="./FirstModule.css"></head><body>')
+            newWindow.document.write(dom.innerHTML)
+            newWindow.focus()
+            // newWindow.print()
+            // newWindow.close()
         }
         window.onbeforeprint = () => {
             this.resume.className += ' beforeExport';
