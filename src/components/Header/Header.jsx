@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import {NavLink} from 'react-router-dom'
+import {NavLink, Link} from 'react-router-dom'
 
 export default class Content extends Component {
 
@@ -50,7 +50,7 @@ export default class Content extends Component {
                         <li>
                             {
                                 login ? <div className="login-space"><a>name</a></div> : 
-                                <div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div>
+                                <Link to="/login"><div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div></Link>
                             }
                         </li>
                     </ul>

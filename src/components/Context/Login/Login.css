@@ -1,0 +1,142 @@
+.loginDrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index:999;
+    width: 100%;
+    height: 100%;
+    background-image: url('./drop.jpg');
+}
+
+.loginDrop .login {
+    position: relative;
+    top: 50%;
+    transform: translateY(-250px);
+    z-index: 1000;
+    width: 400px;
+    height: 500px;
+    background-color: rgb(235, 235, 255, 0.5);
+    border-radius: 20px;
+    margin: 0 auto;
+    box-shadow: 0px 0px 3px rgb(179, 179, 179);
+}
+.loginDrop .login .login-nav {
+    display: flex;
+    flex-flow: row;
+}
+.loginDrop .login .login-nav div a {
+    padding-top: 20px;
+    display: inline-block;
+    width: 60%;
+    height: 100%;
+    color: rgb(243, 243, 243);
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.loginDrop .login .login-nav div:nth-child(1) {
+    text-align: center;
+    flex:1;
+}
+
+.loginDrop .login .login-nav div:nth-child(2) {
+    text-align: center;
+    flex:1;
+}
+
+.loginDrop .login .login-nav div:nth-child(1) a {
+    border-radius: 20px 0 0 0;
+}
+
+.loginDrop .login .login-nav div:nth-child(2) a {
+    border-radius: 0 20px 0 0;
+}
+
+.activeLogin {
+    font-size: 25px !important;
+    font-weight: 700!important;
+    border-bottom: 3px solid #fff;
+}
+
+.loginForm {
+    margin-top: -10px;
+    width: 300px;
+    padding: 45px;
+}
+
+.loginForm .login-input {
+    border: 0;
+    border-bottom : 2px solid rgba(177, 177, 177, 0.521);
+    outline: none;
+    margin: 20px 0px 0 0;
+    width: 270px;
+    padding: 10px 28px 10px 10px;
+    height: 25px;
+    background-color: rgb(235, 235, 255, 0);
+    font-size: 18px;
+    color: rgb(68, 68, 68);
+    font-weight: 600;
+}
+
+.login-input::-webkit-input-placeholder {
+    font-size: 17px;
+    font-weight: 400;
+    color: rgb(133, 133, 133);
+}
+
+.loginForm ul {
+    list-style: none;
+    float: right;
+    margin: 0;
+}
+
+.loginForm ul li {
+    margin: 30px 0 0 0;
+    text-align: right;
+    color: rgb(68, 68, 68);
+}
+
+.loginForm ul li input {
+    display: inline-block;
+}
+
+.login-submit {
+    margin-top: 50px;
+    width: 100%;
+    height: 50px;
+    border: 0;
+    background-image: linear-gradient(to right, #03a9f4, #f441a5, #ffeb3d, #09a8f4);
+    background-size: 400%;
+    font-size: 25px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    color: rgb(243, 243, 243, 0.8);
+}
+
+.login-submit:hover {
+    cursor: pointer;
+    animation: loginBt 5s linear infinite alternate;
+    animation-fill-mode: forwards;
+}
+
+@keyframes loginBt {
+    100% {background-position: -400% 0;}
+}
+
+.showPassword {
+    position: absolute;
+    top: 190px;
+    right: 48px;
+}
+
+.hiddenPassword {
+    position: absolute;
+    top: 190px;
+    right: 48px;
+}
+
+svg:hover {
+    cursor: pointer;
+}

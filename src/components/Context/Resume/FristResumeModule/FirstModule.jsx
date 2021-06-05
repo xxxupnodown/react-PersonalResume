@@ -34,12 +34,14 @@ export default class FirstModule extends Component {
 
     componentDidMount() {
         this.exportBt.onclick = () => {
-            // window.print()
-            let dom = document.querySelector('.resume')
-            let newWindow = window.open()
-            newWindow.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="./FirstModule.css"></head><body>')
-            newWindow.document.write(dom.innerHTML)
-            newWindow.focus()
+            window.print()
+            // let dom = document.querySelector('.resume')
+            // let newWindow = window.open()
+            // console.log(window.location.href)
+            // newWindow.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="'+ window.location.host +'/newWindowCss/module1.css"></head><body>')
+            // newWindow.document.write(dom.innerHTML)
+            // newWindow.document.write('</body></html>')
+            // newWindow.focus()
             // newWindow.print()
             // newWindow.close()
         }

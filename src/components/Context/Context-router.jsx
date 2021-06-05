@@ -5,6 +5,7 @@ import Load from '../Load/Load'
 const Resume = lazy(() => import('./Resume'))
 const Index = lazy(() => import('./Index'))
 const FirstResume = lazy(() => import('./Resume/FristResumeModule/FirstModule'))
+const Login = lazy(() => import ('./Login/Login'));
 
 export default class Header extends Component {
     render() {
@@ -26,7 +27,11 @@ export default class Header extends Component {
                     <Suspense fallback={<Load />} >    
                         <Route path="/resume/module1" component={FirstResume} />
                     </Suspense>
-                    {/* <Redirect to='/index' /> */}
+                    <Suspense fallback={<Load />} >    
+                        <Route path="/login" component={Login} />
+                    </Suspense>
+
+                    <Redirect to='/index' />
                 </div>
             </div>
         )
