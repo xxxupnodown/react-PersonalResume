@@ -1,10 +1,18 @@
 import React, { Component} from 'react'
 import {NavLink, Link} from 'react-router-dom'
+import PubSub from 'pubsub-js'
 
 export default class Content extends Component {
 
     state = {
-        login: false
+        login: false,
+        user: ""
+    }
+
+    componentWillUnmount() {
+        if (window.cookie) { // 
+
+        }
     }
 
     componentDidMount() {
@@ -15,6 +23,22 @@ export default class Content extends Component {
                 setTimeout(() => {this.loginBt.style = ""}, 300)
             }
         }
+
+        const map = this.parseCookie(document.cookie)
+        const username = map.get('us')
+        if (username) this.setState({login: true, user: username})
+    }
+
+    parseCookie = (str) => {
+        const temp = str.split(";")
+        const map = new Map()
+        for (let i = 0; i < temp.length; i++) {
+            temp[i].trim()
+            const key = temp[i].split('=')[0]
+            const value = temp[i].split('=')[1]
+            map.set(key, value)
+        }
+        return map
     }
 
     render() {
@@ -49,7 +73,7 @@ export default class Content extends Component {
                         </li>
                         <li>
                             {
-                                login ? <div className="login-space"><a>name</a></div> : 
+                                login ? <div className="login-space"><a>{this.state.user}</a></div> : 
                                 <Link to="/login"><div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div></Link>
                             }
                         </li>
