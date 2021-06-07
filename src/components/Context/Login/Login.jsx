@@ -1,7 +1,7 @@
 import {React, Fragment, useRef} from 'react'
 import {NavLink, Route, Switch, Redirect} from 'react-router-dom'
+import {createBrowserHistory} from 'history'
 import axios from 'axios'
-import PubSub from 'pubsub-js'
 import './Login.css'
 
 export default function Login() {
@@ -32,7 +32,6 @@ function Dl() {
     const user = useRef(null)
     const err = useRef(null)
 
-    let back = false
 
     document.onselectstart= () => false  // 屏蔽双击选中
 
@@ -58,7 +57,7 @@ function Dl() {
         const check = new RegExp(/^[0-9a-zA-Z]{6,16}$/)
         if (!check.test(username)) {
             e.target.className += ' inputerr'
-            err.current.innerHTML = '用户名必须6-16数字与英文！'
+            err.current.innerHTML = '用户名必须6-16数字或英文！'
             err.current.className = ''
         }
         else {
@@ -84,9 +83,9 @@ function Dl() {
             }
         })
         if (result.data.status === 'success') {
-            PubSub.publish('login', username)
-            back = true
-            console.log(back)
+            // const history = new createBrowserHistory()
+            // history.go(-1)
+            window.location.href = window.location.host + '/index'
         }
     }
 
@@ -109,7 +108,6 @@ function Dl() {
             </ul>
             <input onClick={submit} className="login-submit" type="button" value="登         录" />
             <p className='hidden' ref={err}></p>
-            {back? <Redirect to="/index" /> : null}
         </div>
     )
 }
@@ -133,7 +131,7 @@ function Zc() {
         const check = new RegExp(/^[0-9a-zA-Z]{6,16}$/)
         if (!check.test(username)) {
             e.target.className += ' inputerr'
-            err.current.innerHTML = '用户名必须6-16数字与英文！'
+            err.current.innerHTML = '用户名必须6-16数字或英文！'
             err.current.className = ''
         }
         else {

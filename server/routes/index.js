@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var crypto = require('crypto')
+var SQL = require('../mysqldb/conn')
 
 class secret {
     constructor () {
@@ -21,13 +22,14 @@ class secret {
 
 const Secret = new secret()
 
-router.post('/registration', function(req, res, next) {
+router.post('/registration', async function(req, res, next) {
     // console.log(req.path) /registration
     const {un} = req.body
     const {ps} = req.body
-    const pass = Secret.setSecret(un);
-    res.cookie('us', pass)
-    res.json({status: 'success'})
+    const pass = Secret.setSecret(un)
+    const sqlResult = await SQL.sqlStr('select * from user')
+    // res.cookie('us', pass)
+    // res.json(sqlResult)
 });
 
 router.post('/login', (req, res, next) => {

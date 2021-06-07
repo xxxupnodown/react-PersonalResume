@@ -40,6 +40,14 @@
     to {opacity: 1;}
 }
 
+@keyframes showSignOut {
+    0% {background-color: rgb(170, 170, 170, 0); color: #ffffff00;}
+    25% {background-color: rgb(170, 170, 170, 0.5); color: #ffffff86;}
+    50% {background-color: rgb(170, 170, 170, 1); color: #ffffff;}
+    75% {background-color: rgb(170, 170, 170, 0.5); color: #ffffff86;}
+    100% {background-color: rgb(170, 170, 170, 0); color: #ffffff00;}
+}
+
 .beforeExport {
     width: 1020px !important;
     height: 1500px !important;

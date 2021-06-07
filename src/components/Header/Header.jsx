@@ -1,6 +1,5 @@
 import React, { Component} from 'react'
 import {NavLink, Link} from 'react-router-dom'
-import PubSub from 'pubsub-js'
 
 export default class Content extends Component {
 
@@ -24,9 +23,23 @@ export default class Content extends Component {
             }
         }
 
+        
         const map = this.parseCookie(document.cookie)
         const username = map.get('us')
         if (username) this.setState({login: true, user: username})
+        else this.setState({login: false, user: ''})
+        setInterval(() => {
+            const map = this.parseCookie(document.cookie)
+            const username = map.get('us')
+            if (username) this.setState({login: true, user: username})
+            else {
+                this.setState({login: false, user: ''})
+                this.signout.className += ' showSignOut'
+                setTimeout(() => {
+                    this.signout.className = this.signout.className.replace(/showSignOut/g, '')
+                }, 1000)
+            }
+        }, 5000)
     }
 
     parseCookie = (str) => {
@@ -71,11 +84,12 @@ export default class Content extends Component {
                             <svg className="search-ico" viewBox="0 0 1024 1024" width="20" height="20"><path d="M447.5 773C627.269 773 773 627.269 773 447.5S627.269 122 447.5 122 122 267.731 122 447.5 267.731 773 447.5 773z m323.905-65.235l205.62 205.62c17.573 17.573 17.573 46.066 0 63.64-17.574 17.573-46.067 17.573-63.64 0l-205.62-205.62C636.543 828.707 546.026 863 447.5 863 218.026 863 32 676.974 32 447.5S218.026 32 447.5 32 863 218.026 863 447.5c0 98.526-34.293 189.043-91.595 260.265z" p-id="4641"></path></svg>
                             <input className="search" type="text" />
                         </li>
-                        <li>
+                        <li style={{position: 'relative'}}>
                             {
                                 login ? <div className="login-space"><a>{this.state.user}</a></div> : 
                                 <Link to="/login"><div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div></Link>
                             }
+                            <span ref={(v)=> {this.signout = v}} className="signout">已登出</span>
                         </li>
                     </ul>
                 </div>

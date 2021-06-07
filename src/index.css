@@ -7,7 +7,6 @@ body {
 .header {
     position: fixed;
     width: 100%;
-    min-width: 1100px;
     top: 0;
     height: 60px;
     background-color: #001529;
@@ -114,10 +113,9 @@ body {
 
 .context {
     width: 100%;
-    min-width: 1100px;
     background-color: rgb(233, 236, 239);
-    margin-top: 60px;
     overflow: hidden;
+    margin-top: 60px;
 }
 
 .context .context-center {
@@ -129,6 +127,24 @@ body {
     padding: 10px;
 }
 
+.header .signout {
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    background-color: rgba(170, 170, 170, 0);
+    color: #ffffff00;
+    font-size:12px;
+    position: absolute;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 10px;
+    z-index: -1;
+    top: 55px;
+    left: 50px;
+}
 
+.showSignOut {
+    animation: showSignOut 1s linear;
+}
 
 
