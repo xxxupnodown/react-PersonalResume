@@ -13,10 +13,10 @@ var app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('secret'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', (req, res, next) => {
+app.use('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost') // 允许局部跨域
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE"); // 允许请求头 部分自定义 头
   res.header("Access-Control-Allow-Credentials", true);

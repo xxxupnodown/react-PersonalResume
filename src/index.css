@@ -68,6 +68,7 @@ body {
 }
 
 .header .header-center ul li .login-space {
+    position: relative;
     width: 100px;
     height: 30px;
     margin-left: 30px;
@@ -147,4 +148,29 @@ body {
     animation: showSignOut 1s linear;
 }
 
+#personal {
+    position: absolute;
+    margin: 0;
+    padding: 10px;
+    width: 80px;
+    height: 90px;
+    top: 0;
+    left: 0;
+    background-color: rgb(238, 238, 238);
+    border-radius: 20px;
+    box-shadow: 0px 0px 3px lightgray;
+    transform: scale(0);
+}
 
+#personal p {
+    margin: 0;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+}
+
+#personal p:hover {
+    cursor: pointer;
+    background-color: lightgray;
+    border-radius: 10px;
+}

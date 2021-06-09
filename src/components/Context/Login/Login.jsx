@@ -1,6 +1,5 @@
 import {React, Fragment, useRef} from 'react'
 import {NavLink, Route, Switch, Redirect} from 'react-router-dom'
-import {createBrowserHistory} from 'history'
 import axios from 'axios'
 import './Login.css'
 
@@ -82,10 +81,18 @@ function Dl() {
                 ps: password
             }
         })
-        if (result.data.status === 'success') {
+        if (result.data.err) {
+            err.current.innerHTML = '密码或用户名错误！'
+            err.current.className = ''
+            pass.current.className += ' inputerr'
+        } else if (result.data.data === 'success') {
             // const history = new createBrowserHistory()
             // history.go(-1)
             window.location.href = window.location.host + '/index'
+        } else if (result.data.data === 'nouser') {
+            user.current.className += ' inputerr'
+            err.current.innerHTML = '没有用户！'
+            err.current.className = ''
         }
     }
 
@@ -196,12 +203,18 @@ function Zc() {
         const username = user.current.value
         const password = pass.current.value
         const repassword = repass.current.value
+
+        // 登录校验
         if (password !== repassword) {
             repass.current.className += ' inputerr'
             err.current.innerHTML = '两次密码不一致！'
             err.current.className = ''
             return 
         }
+        if (user.current.className.indexOf('inputerr') !== -1 || pass.current.className.indexOf('inputerr') !== -1) {
+            return
+        }
+
         // 发送axios请求
         const url = window.location.host.toString() // localhost
         const result = await axios({
@@ -213,7 +226,14 @@ function Zc() {
                 ps: password
             }
         })
-        console.log(result)
+        if (result.data.err) {
+            err.current.innerHTML = '用户名已存在！'
+            err.current.className = ''
+            user.current.className += ' inputerr'
+            return 
+        } else if (result.data.data === 'success') {
+            window.location.href = window.location.host + '/index'
+        }
     }
 
     return (

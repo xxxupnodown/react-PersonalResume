@@ -1,17 +1,12 @@
 import React, { Component} from 'react'
 import {NavLink, Link} from 'react-router-dom'
+import axios from 'axios'
 
 export default class Content extends Component {
 
     state = {
         login: false,
         user: ""
-    }
-
-    componentWillUnmount() {
-        if (window.cookie) { // 
-
-        }
     }
 
     componentDidMount() {
@@ -28,18 +23,23 @@ export default class Content extends Component {
         const username = map.get('us')
         if (username) this.setState({login: true, user: username})
         else this.setState({login: false, user: ''})
-        setInterval(() => {
+        this.listenCookie = setInterval(() => {
             const map = this.parseCookie(document.cookie)
             const username = map.get('us')
             if (username) this.setState({login: true, user: username})
-            else {
-                this.setState({login: false, user: ''})
-                this.signout.className += ' showSignOut'
-                setTimeout(() => {
-                    this.signout.className = this.signout.className.replace(/showSignOut/g, '')
-                }, 1000)
-            }
-        }, 5000)
+            else this.setState({login: false, user: ''})
+            // else { // 修改登陆状态 显示退出登录
+            //     this.setState({login: false, user: ''})
+            //     this.signout.className += ' showSignOut'
+            //     setTimeout(() => {
+            //         this.signout.className = this.signout.className.replace(/showSignOut/g, '')
+            //     }, 1000)
+            // }
+        }, 3000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.listenCookie)
     }
 
     parseCookie = (str) => {
@@ -52,6 +52,35 @@ export default class Content extends Component {
             map.set(key, value)
         }
         return map
+    }
+
+    userOptions = () => {
+        if (this.personal.className.indexOf('showPersonal') === -1) {
+            if (this.personal.className.indexOf('hiddenPersonal') !== -1) {
+                this.personal.className = this.personal.className.replace(/ hiddenPersonal/g, '')
+            }
+            this.personal.className += ' showPersonal'
+        } else {
+            this.personal.className = 'login-space hiddenPersonal'
+        }
+    }
+
+    hiddenUserOptions = () => {
+        if (this.personal.className.indexOf('showPersonal') !== -1) {
+            this.personal.className = 'login-space hiddenPersonal'
+        }
+    }
+
+    logout = async () => {
+        const url = window.location.host.toString() // localhost
+        const result = await axios({
+            method: 'post',
+            url: 'http://localhost:3000/logout',
+            withCredentials: true
+        })
+        if (result.data.data === 'logout') {
+            this.setState({})
+        }
     }
 
     render() {
@@ -86,10 +115,18 @@ export default class Content extends Component {
                         </li>
                         <li style={{position: 'relative'}}>
                             {
-                                login ? <div className="login-space"><a>{this.state.user}</a></div> : 
+                                login ? <div onClick={this.userOptions} tabindex="0" onBlur={this.hiddenUserOptions} className="login-space">
+                                    <a>{this.state.user}</a>
+                                    <div ref={(v) => {this.personal = v}} id="personal">
+                                        <p>个人中心</p>
+                                        <p>我的简历</p>
+                                        <p onClick = {this.logout}>注    销</p>
+                                    </div>
+                                </div> : 
                                 <Link to="/login"><div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div></Link>
                             }
-                            <span ref={(v)=> {this.signout = v}} className="signout">已登出</span>
+                            <span ref={(v)=> {this.signout = v}} className="signout">
+                            </span>
                         </li>
                     </ul>
                 </div>

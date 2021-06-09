@@ -48,6 +48,26 @@
     100% {background-color: rgb(170, 170, 170, 0); color: #ffffff00;}
 }
 
+@keyframes showPersonal {
+    from {transform: scale(0); top:0;}
+    to {transform: scale(1); top: 50px;}
+}
+
+@keyframes hiddenPersonal {
+    from {transform: scale(1); top: 50px;}
+    to {transform: scale(0); top:0;}
+}
+
+.showPersonal {
+    animation: showPersonal 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.hiddenPersonal {
+    animation: hiddenPersonal 0.5s;
+    animation-fill-mode: forwards;
+}
+
 .beforeExport {
     width: 1020px !important;
     height: 1500px !important;
