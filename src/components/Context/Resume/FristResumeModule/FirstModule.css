@@ -1,9 +1,10 @@
 .context .context-center .resume {
-    width: 785px;
-    padding: 50px;
+    width: 750px;
+    padding: 40px;
     border: 1px solid gray;
     box-shadow: 0px 0px 3px rgba(128, 128, 128, 0.7);
-    height: 1460px;
+    height: 1100px;
+    margin-left: 35px;
 }
 
 .context .context-center .resume span:focus {
@@ -15,7 +16,7 @@
 }
 
 .resume span {
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: 500;
     margin-top: 5px;
     border: 2px solid #ffffff00;

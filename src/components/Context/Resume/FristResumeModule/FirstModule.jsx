@@ -49,7 +49,7 @@ export default class FirstModule extends Component {
             this.resume.className += ' beforeExport';
         }
         window.onafterprint = () => {
-            this.resume.className = this.resume.className.replace('beforeExport', '')
+            this.resume.className = this.resume.className.replace(/ beforeExport/g, '')
         }
     }
 

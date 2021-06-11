@@ -2,6 +2,8 @@ import React, { Component} from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import axios from 'axios'
 
+axios.defaults.baseURL = 'http://localhost:3000/' // axios 请求默认url
+
 export default class Content extends Component {
 
     state = {
@@ -11,16 +13,14 @@ export default class Content extends Component {
 
     componentDidMount() {
         // 移开登录按钮动画
-        if (!this.state.login) {
-            this.loginBt.onmouseleave = () => {
-                this.loginBt.style = "animation: btBlur 0.3s"
-                setTimeout(() => {this.loginBt.style = ""}, 300)
-            }
+        this.loginBt.onmouseleave = () => {
+            this.loginBt.className += " btBlur"
+            setTimeout(() => {this.loginBt.className = this.loginBt.className.replace(/ btBlur/g, '')}, 500)
         }
 
         
-        const map = this.parseCookie(document.cookie)
-        const username = map.get('us')
+        const map = this.parseCookie(document.cookie) //获取cookie
+        const username = map.get('us') // 截取cookie
         if (username) this.setState({login: true, user: username})
         else this.setState({login: false, user: ''})
         this.listenCookie = setInterval(() => {
@@ -72,15 +72,28 @@ export default class Content extends Component {
     }
 
     logout = async () => {
-        const url = window.location.host.toString() // localhost
         const result = await axios({
             method: 'post',
-            url: 'http://localhost:3000/logout',
+            url: '/logout',
             withCredentials: true
         })
         if (result.data.data === 'logout') {
-            this.setState({})
+            this.setState({login: false, user: ''})
+            this.signout.className += ' showSignOut'
+            setTimeout(() => {
+                this.signout.className = this.signout.className.replace(/showSignOut/g, '')
+            }, 1000)
         }
+    }
+
+    personalCenter = () => {
+        axios({
+            method: 'post',
+            withCredentials: true,
+            url: 'personal'
+        }).then(data => {
+            console.log(data)
+        })
     }
 
     render() {
@@ -115,10 +128,10 @@ export default class Content extends Component {
                         </li>
                         <li style={{position: 'relative'}}>
                             {
-                                login ? <div onClick={this.userOptions} tabindex="0" onBlur={this.hiddenUserOptions} className="login-space">
+                                login ? <div onClick={this.userOptions} tabIndex="0" onBlur={this.hiddenUserOptions} className="login-space">
                                     <a>{this.state.user}</a>
                                     <div ref={(v) => {this.personal = v}} id="personal">
-                                        <p>个人中心</p>
+                                        <p onClick = {this.personalCenter}>个人中心</p>
                                         <p>我的简历</p>
                                         <p onClick = {this.logout}>注    销</p>
                                     </div>
@@ -126,6 +139,7 @@ export default class Content extends Component {
                                 <Link to="/login"><div className="login-space"><button ref={(v) => {this.loginBt = v}}>注册登录</button></div></Link>
                             }
                             <span ref={(v)=> {this.signout = v}} className="signout">
+                                已登出
                             </span>
                         </li>
                     </ul>

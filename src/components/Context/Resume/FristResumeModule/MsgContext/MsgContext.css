@@ -9,7 +9,7 @@
 
 .msgTitle-option {
     position: absolute;
-    top: 30px;
+    top: 25px;
     right: 0;
 }
 
@@ -37,7 +37,7 @@
 
 .msgTitle span{
     color: #2081CE;
-    font-size: 1.4em !important;
+    font-size: 1em !important;
     font-weight: 900 !important;
 }
 
@@ -53,12 +53,15 @@
     position: relative;
 }
 
+.msgContext span {
+    line-height: 30px!important;
+}
+
 .msgContext-title-msgDetail:hover {
     border: 1px dashed #2081CE;
 }
 
 .msgContext .msgContext-title {
-    margin-top: 5px;
     display: flex;
     border: 2px dashed #2081CE00;
     justify-content: space-between;

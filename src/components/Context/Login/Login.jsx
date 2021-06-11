@@ -3,6 +3,8 @@ import {NavLink, Route, Switch, Redirect} from 'react-router-dom'
 import axios from 'axios'
 import './Login.css'
 
+axios.defaults.baseURL = 'http://localhost:3000/'
+
 export default function Login() {
     return (
         <Fragment>
@@ -70,11 +72,9 @@ function Dl() {
         const password = pass.current.value
         // 发送axios请求
 
-        const url = window.location.host.toString() // localhost
-
         const result = await axios({
             method: 'POST',
-            url: 'http://' + url + ':3000/login',
+            url: '/login',
             withCredentials: true,
             data: {
                 un: username,
@@ -88,7 +88,7 @@ function Dl() {
         } else if (result.data.data === 'success') {
             // const history = new createBrowserHistory()
             // history.go(-1)
-            window.location.href = window.location.host + '/index'
+            window.location.href = 'http://localhost:81/index'
         } else if (result.data.data === 'nouser') {
             user.current.className += ' inputerr'
             err.current.innerHTML = '没有用户！'
@@ -216,10 +216,9 @@ function Zc() {
         }
 
         // 发送axios请求
-        const url = window.location.host.toString() // localhost
         const result = await axios({
             method: 'POST',
-            url: 'http://' + url + ':3000/registration',
+            url: '/registration',
             withCredentials: true,
             data: {
                 un: username,
@@ -232,7 +231,7 @@ function Zc() {
             user.current.className += ' inputerr'
             return 
         } else if (result.data.data === 'success') {
-            window.location.href = window.location.host + '/index'
+            window.location.href = 'http://localhost:81/index'
         }
     }
 
