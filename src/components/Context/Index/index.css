@@ -1,5 +1,36 @@
 .imgLoop {
-    width: 730px;
-    height: 300px;
+    position: relative;
+    width: 830px;
+    height: 340px;
     margin: 10px auto;
+    overflow:hidden;
+}
+
+.imgLoop .imgContainer {
+    width: 10000px;
+}
+
+.imgLoop .imgLeft {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    left: -150px;
+    top: 50px;
+}
+
+.imgLoop .imgRight {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    right: 120px;
+    top: 50px;
+}
+
+
+.imgLoop .imgContainer img {
+    width: 830px;
+    height: 340px;
+    border-radius: 10px;
+    height: 340px;
+    float: left;
 }

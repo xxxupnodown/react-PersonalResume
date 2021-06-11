@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var crypto = require('crypto')
-var SQL = require('../mysqldb/conn')
-var CONST = require('../constant/constant')
+var crypto = require('crypto')  // 引入加密库
+var SQL = require('../mysqldb/conn') // 引入 连接的SQL
+var CONST = require('../constant/constant') // 引入 定义的返回常量规范
+var FILE = require('../readFile/readFile') // 引入 封装 fs 读取文件
 
-class secret {
-    constructor () {
+class secret {     // 定义加密方法与 服务器保存 token
+    constructor () { 
         this.cookie = new Map()
     }
     setSecret(str) {
@@ -22,9 +23,9 @@ class secret {
 }
 
 const Secret = new secret()
+const readFile = new FILE()
 
 router.post('/registration', async function(req, res, next) {
-    // console.log(req.path) /registration
     const {un} = req.body
     const {ps} = req.body
     // const pass = Secret.setSecret(un) 加密
@@ -75,7 +76,7 @@ router.post('/login', (req, res, next) => {
 
 router.post('/logout', (req, res) => {
   if (Secret.cookie.get(req.cookies.us)) Secret.cookie.delete(req.cookies.us)
-  res.clearCookie('tk')
+  res.clearCookie('tk', {httpOnly: true})
   res.clearCookie('us')
   res.json(CONST.logout('logout'))
 })
@@ -85,13 +86,22 @@ router.use('/personal', (req, res, next) => {  // 检测cookie是否在登录状
   else {
     if (Secret.cookie.get(req.cookies.us)) Secret.cookie.delete(req.cookies.us)  // 不存在删除cookie 防止用户修改cookie
     res.clearCookie('us')
-    res.clearCookie('tk')
+    res.clearCookie('tk', {httpOnly: true})
     res.send()
   }
 })
 
-router.post('/personal', (req, res) => {
+router.post('/personal', (req, res) => {  //  个人主页
   res.json({data: 'personal'})
+})
+
+router.get('/imgloop/:id', (req, res) => {  // 首页轮播图
+  const name = 'index' + req.params.id
+  readFile.readPic(name).then(data => {
+    data.pipe(res)
+  }).catch(err => {
+    res.send('<h1 style="text-align: center;margin-top: 100px;">404 NOT FOUND</h1>')
+  })
 })
   
 module.exports = router;

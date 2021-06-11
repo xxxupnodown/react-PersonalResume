@@ -16,3 +16,9 @@ module.exports.logout = (data) => {
         data: data
     }
 }
+
+module.exports.data = (data) => {
+    return {
+        data: data
+    }
+}
