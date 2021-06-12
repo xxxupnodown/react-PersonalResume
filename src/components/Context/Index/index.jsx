@@ -9,6 +9,7 @@ axios.defaults.baseURL = 'http://localhost:3000/'
 export default function Index() {
 
     const imgLoop = React.useRef(null)
+    const imgOptions = React.useRef(null)
     let [state, setState] = React.useState({   // hooks State
         num: 1
     })
@@ -16,11 +17,12 @@ export default function Index() {
     React.useEffect(() => {
         const loopInterval = setInterval(() => {
             const {num} = state
-            imgLoop.current.style = 'transform: translateX(-'+ num * 830 +'px)'
-            if (num === CONST.imgNum) {
-                setState({num: 0})
+            if (num >= CONST.imgNum) {
+                setState({num: 1})
+                imgLoop.current.style = 'transform: translateX(-'+ 0 * 900 +'px)'
             } else {
                 setState({num: num + 1})
+                imgLoop.current.style = 'transform: translateX(-'+ num * 900 +'px)'
             }
         }, 4000)
 
@@ -29,16 +31,28 @@ export default function Index() {
         }
     })
 
+    const changePic = (e) => {
+        const index = e.target.getAttribute('index')
+        imgLoop.current.style = 'transform: translateX(-'+ (index-1) * 900 +'px)'
+        setState({num: index*1})
+    }
+
     return (
         <Fragment>
             <div className="imgLoop">
-                <div className="imgLeft"><svg viewBox='0 0 1024 1024' version="1.1" width="1000" height= '700'><path fill="#ffffff" d="M57.983070440395636,114.11572950442951 L0.7051218151034391,17.115698888358423 L38.427171590291664,17.115698888358423 L95.70512021557579,114.11572950442951 L38.427171590291664,211.11568202743723 L0.7051218151034391,211.11568202743723 L57.983070440395636,114.11572950442951 z" id="svg_3" stroke-dasharray="none" transform="rotate(179.92308044433594 48.20513916015625,114.11569213867186) "></path></svg></div>
-                <div className="imgRight"><svg viewBox='0 0 1024 1024' version="1.1" width="1000" height= '700'><path fill="#ffffff" d="M57.983070440395636,114.11572950442951 L0.7051218151034391,17.115698888358423 L38.427171590291664,17.115698888358423 L95.70512021557579,114.11572950442951 L38.427171590291664,211.11568202743723 L0.7051218151034391,211.11568202743723 L57.983070440395636,114.11572950442951 z" id="svg_3" stroke-dasharray="none" transform="rotate(0.2416711002588272 48.20512008667106,114.1156845092768) "></path></svg></div>
+                <ul ref={imgOptions} className="imgOptions">
+                    {
+                        CONST.render.map(v => {
+                            if (v === state.num) return (<li onClick={changePic} key={v} index={v} style={{backgroundColor: 'rgb(219, 219, 219)'}}></li>)
+                            else return(<li key={v} index={v} onClick={changePic} ></li>)
+                        })
+                    }
+                </ul>
                 <div ref={imgLoop} className="imgContainer">
                     {
                         CONST.render.map(v => {
                             return(
-                                <img src={"http://localhost:3000/imgloop/" + v} alt="imgloop" />
+                                <img key={v} src={"http://localhost:3000/imgloop/" + v} alt="imgloop" />
                             )
                         })
                     }
