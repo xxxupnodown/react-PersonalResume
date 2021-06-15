@@ -11,6 +11,13 @@ module.exports.error = (err, errId) => {
     }
 }
 
+module.exports.sqlError = (err, errId) => {
+    return {
+        sqlErr: err,
+        errno: errId    
+    }
+}
+
 module.exports.logout = (data) => {
     return {
         data: data

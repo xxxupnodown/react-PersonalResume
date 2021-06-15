@@ -4,6 +4,7 @@ var crypto = require('crypto')  // 引入加密库
 var SQL = require('../mysqldb/conn') // 引入 连接的SQL
 var CONST = require('../constant/constant') // 引入 定义的返回常量规范
 var FILE = require('../readFile/readFile') // 引入 封装 fs 读取文件
+var PersonalRouter = require('./file')
 
 class secret {     // 定义加密方法与 服务器保存 token
     constructor () { 
@@ -58,50 +59,48 @@ router.post('/login', (req, res, next) => {
   // const pass = Secret.setSecret(un);
 
   SQL.sqlStr('select password from user where username = ? ', [un]).then(data => {
-      if (data.length === 0) res.json(CONST.success('nouser'))
+      if (data.length === 0) res.json(CONST.data('noUser')) // 提示没有用户 用data传递
       else if (data[0].password !== ps) {
-        res.json(CONST.error('noUser'))
+        res.json(CONST.error('noUser')) // 提示 密码错误 用 error 传递
       } else if (data[0].password === ps){
         const token = Date.now()
         Secret.cookie.set(un, token)
         res.cookie('us', un)
-        res.cookie('tk', token)
+        res.cookie('tk', token, {httpOnly: true})
         res.json(CONST.success('success'))
       }
   }).catch(err => {
-    res.json(CONST.error('serverErr'))
+    res.json(CONST.error(err))
   })
 //   res.cookie('us', un /*, {httpOnly: true}*/)
 })
 
 router.post('/logout', (req, res) => {
   if (Secret.cookie.get(req.cookies.us)) Secret.cookie.delete(req.cookies.us)
-  res.clearCookie('tk', {httpOnly: true})
+  res.clearCookie('tk')
   res.clearCookie('us')
   res.json(CONST.logout('logout'))
 })
 
 router.use('/personal', (req, res, next) => {  // 检测cookie是否在登录状态中
-  if (Secret.cookie.get(req.cookies.us) == req.cookies.tk) next() // 存在放行
+  if (Secret.cookie.get(req.cookies.us) === (req.cookies.tk*1) && req.cookies.tk !== undefined && Secret.cookie.get(req.cookies.us) !== undefined) next() // 存在放行
   else {
     if (Secret.cookie.get(req.cookies.us)) Secret.cookie.delete(req.cookies.us)  // 不存在删除cookie 防止用户修改cookie
     res.clearCookie('us')
-    res.clearCookie('tk', {httpOnly: true})
-    res.send()
+    res.clearCookie('tk')
+    res.send(CONST.error('logout'))
   }
 })
 
-router.post('/personal', (req, res) => {  //  个人主页
-  res.json({data: 'personal'})
-})
+router.use('/personal', PersonalRouter)
 
 router.get('/imgloop/:id', (req, res) => {  // 首页轮播图
   const name = 'index' + req.params.id
-  readFile.readPic(name).then(data => {
+  readFile.readStreamPic('imgloop', name).then(data => {
     data.pipe(res)
   }).catch(err => {
     res.send('<h1 style="text-align: center;margin-top: 100px;">404 NOT FOUND</h1>')
   })
 })
-  
+
 module.exports = router;

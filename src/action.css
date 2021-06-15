@@ -59,12 +59,15 @@
 }
 
 .showPersonal {
-    animation: showPersonal 0.5s;
+    animation: showPersonal 0.3s;
     animation-fill-mode: forwards;
 }
 
 .hiddenPersonal {
-    animation: hiddenPersonal 0.5s;
+    /* transform: scale(0);
+    top:0; */
+    
+    animation: hiddenPersonal 0.2s;
     animation-fill-mode: forwards;
 }
 

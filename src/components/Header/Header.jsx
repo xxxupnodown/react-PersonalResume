@@ -2,8 +2,6 @@ import React, { Component} from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:3000/' // axios 请求默认url
-
 export default class Content extends Component {
 
     state = {
@@ -23,18 +21,19 @@ export default class Content extends Component {
         const username = map.get('us') // 截取cookie
         if (username) this.setState({login: true, user: username})
         else this.setState({login: false, user: ''})
+
+        let snapshotCookie = username
+
         this.listenCookie = setInterval(() => {
             const map = this.parseCookie(document.cookie)
             const username = map.get('us')
-            if (username) this.setState({login: true, user: username})
-            else this.setState({login: false, user: ''})
-            // else { // 修改登陆状态 显示退出登录
-            //     this.setState({login: false, user: ''})
-            //     this.signout.className += ' showSignOut'
-            //     setTimeout(() => {
-            //         this.signout.className = this.signout.className.replace(/showSignOut/g, '')
-            //     }, 1000)
-            // }
+
+            if (username) this.setState({login: true, user: username}) // 判断cookie修改用户名
+            else this.setState({login: false, user: ''}) // 
+            if (snapshotCookie !== username) {
+                this.setState({login: false, user: ''})
+                clearInterval(this.listenCookie)
+            }
         }, 3000)
     }
 
@@ -54,46 +53,41 @@ export default class Content extends Component {
         return map
     }
 
-    userOptions = () => {
-        if (this.personal.className.indexOf('showPersonal') === -1) {
-            if (this.personal.className.indexOf('hiddenPersonal') !== -1) {
-                this.personal.className = this.personal.className.replace(/ hiddenPersonal/g, '')
+    userOptions = (e) => {
+        if (e.target.tagName === 'A') {
+            if (this.personal.className.indexOf('showPersonal') === -1) {
+                if (this.personal.className.indexOf('hiddenPersonal') !== -1) {
+                    this.personal.className = this.personal.className.replace(/ hiddenPersonal/g, '')
+                }
+                this.personal.className += ' showPersonal'
+            } else {
+                this.personal.className = ' hiddenPersonal'
             }
-            this.personal.className += ' showPersonal'
-        } else {
-            this.personal.className = 'login-space hiddenPersonal'
         }
     }
 
     hiddenUserOptions = () => {
-        if (this.personal.className.indexOf('showPersonal') !== -1) {
-            this.personal.className = 'login-space hiddenPersonal'
-        }
+        setTimeout(() => {
+            if (this.personal.className.indexOf('showPersonal') !== -1) {
+                this.personal.className = ' hiddenPersonal'
+            }
+        }, 50);
     }
 
     logout = async () => {
         const result = await axios({
             method: 'post',
-            url: '/logout',
+            url: 'http://localhost:3000/logout',
             withCredentials: true
         })
         if (result.data.data === 'logout') {
             this.setState({login: false, user: ''})
             this.signout.className += ' showSignOut'
+            window.location.href = 'http://localhost:81/login/dl'
             setTimeout(() => {
                 this.signout.className = this.signout.className.replace(/showSignOut/g, '')
             }, 1000)
         }
-    }
-
-    personalCenter = () => {
-        axios({
-            method: 'post',
-            withCredentials: true,
-            url: 'personal'
-        }).then(data => {
-            console.log(data)
-        })
     }
 
     render() {
@@ -103,22 +97,22 @@ export default class Content extends Component {
                 <div className="header-center" >
                     <ul>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="/index">
+                            <NavLink replace={true}  className="nav-router" to="/index">
                                 首页
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="/group">
+                            <NavLink replace={true}  className="nav-router" to="/group">
                                 部落
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="/article">
-                                帖子
+                            <NavLink replace={true}  className="nav-router" to="/article">
+                                消息
                             </NavLink>
                         </li>
                         <li className="nav-title">
-                            <NavLink className="nav-router" to="/resume">
+                            <NavLink replace={true}  className="nav-router" to="/resume">
                                 简历制作 
                             </NavLink>
                         </li>
@@ -131,7 +125,7 @@ export default class Content extends Component {
                                 login ? <div onClick={this.userOptions} tabIndex="0" onBlur={this.hiddenUserOptions} className="login-space">
                                     <a>{this.state.user}</a>
                                     <div ref={(v) => {this.personal = v}} id="personal">
-                                        <p onClick = {this.personalCenter}>个人中心</p>
+                                        <Link to='/personal'><p style={{color: 'black'}} >个人中心</p></Link>
                                         <p>我的简历</p>
                                         <p onClick = {this.logout}>注    销</p>
                                     </div>

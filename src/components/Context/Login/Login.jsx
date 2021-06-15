@@ -36,19 +36,19 @@ function Dl() {
 
     document.onselectstart= () => false  // 屏蔽双击选中
 
-    const showPassword = () => {
+    const showPassword = () => { // 显示密码 
         showIco.current.className = 'hidden'
         hiddenIco.current.className = hiddenIco.current.className.replace(/hidden/g, '')
         pass.current.type = 'text'
     }
 
-    const hiddenPassword = () => {
+    const hiddenPassword = () => { // 隐藏密码
         hiddenIco.current.className = 'hidden'
         showIco.current.className = showIco.current.className.replace(/hidden/g, '')
         pass.current.type = 'password'
     }
 
-    const checkUser = (e) => {
+    const checkUser = (e) => { // 用户名校验
         const username = e.target.value
         if (!username) {
             e.target.className = e.target.className.replace(/inputerr/g, '')
@@ -231,7 +231,7 @@ function Zc() {
             user.current.className += ' inputerr'
             return 
         } else if (result.data.data === 'success') {
-            window.location.href = 'http://localhost:81/index'
+            window.location.href = 'http://localhost:81/personal'
         }
     }
 

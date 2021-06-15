@@ -1,0 +1,49 @@
+.personalDetail {
+    padding: 50px 70px 50px 70px;
+    overflow: hidden;
+}
+
+.personalDetail .personalImg {
+    float: left;
+    width: 200px;
+    height: 200px;
+}
+
+.personalDetail .personalImgUpload {
+    position: absolute;
+    top: 60px;
+    left: 80px;
+    width: 200px;
+    height: 200px;
+}
+
+.personalDetail .personalRight {
+    display: inline-block;
+    padding-left: 40px;
+    padding-top: 5px;
+}
+
+.personalDetail .personalRight span {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.personalDetail .personalRight p {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.personalDetail .personalRight:nth-last-child() {
+    line-height: 120px;
+}
+
+.personalDetail .personalRight b { 
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.personalDetail .personalRight textarea {
+    width: 450px;
+    height: 60px;
+    resize: none;
+}
