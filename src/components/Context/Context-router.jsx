@@ -7,6 +7,7 @@ const Index = lazy(() => import('./Index'))
 const FirstResume = lazy(() => import('./Resume/FristResumeModule/FirstModule'))
 const Login = lazy(() => import ('./Login/Login'));
 const Personal = lazy(() => import ('./Personal/Personal'));
+const Massge = lazy(() => import ('./Massge/Massge'))
 
 export default class Header extends Component {
     render() {
@@ -20,9 +21,7 @@ export default class Header extends Component {
                         <Route path="/group">
                             group
                         </Route>
-                        <Route path="/article">
-                            消息
-                        </Route>
+                        <Route path="/article" component={Massge} />
                         <Route path="/resume/module1" component={FirstResume} />
                         <Route path="/resume" exact={true} component={Resume} />
                         <Route path="/login" component={Login} />  

@@ -59,16 +59,15 @@ router.post('/upload', (req, res) => {
             })
         }
     });
+})
 
-    // const username = req.cookies.us // 获取当前用户名
-    // const {nickname} = req.body // 获取 修改的昵称
-    // const sex = req.body.sex*1 // 获取 性别
-    // const {signature} = req.body 
-    // SQL.sqlStr("update user set name = ?, sex = ?, personalDetail = ? where username = '"+ username +"';", [nickname, sex, signature]).then(data => {
-    //     res.json(CONST.success('success')) // 修改成功
-    // }).catch(err => {
-    //     res.json(CONST.sqlError(err)) // 失败
-    // })
+router.get('/userlist', (req, res) => { // 返回用户关系
+    const username = req.cookies.us
+    SQL.sqlStr(`select friendid from user_relation 
+                where groupid = 1 and userid=(select id from user where username = ?)`, [username]).then((err, data) => {
+        if (err) res.send(err)
+        else res.json(data)
+    })
 })
 
 module.exports = router;

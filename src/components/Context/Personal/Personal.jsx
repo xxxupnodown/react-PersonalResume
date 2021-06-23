@@ -89,7 +89,7 @@ export default function Personal() {
 
     const changeImg = (e) => {
         const file = e.target.files[0] 
-        const ext = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase(); // 读取文件后缀
+        // const ext = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase(); // 读取文件后缀
         const reader = new FileReader() // 创建 fileReader 转成base64 方便img标签显示
         reader.readAsDataURL(file)
         reader.onload = (e) => {
@@ -101,7 +101,7 @@ export default function Personal() {
     return (
         <Fragment>
             <div className="personalDetail">
-                <img className="personalImg" ait="header" ref={headerPic} />
+                <img className="personalImg" alt="header" ref={headerPic} />
                 <label className="personalImgUpload">
                     <input onChange={changeImg} ref={uploadImg} hidden type='file' accept='image/*' />
                 </label>
