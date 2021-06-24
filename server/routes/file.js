@@ -70,4 +70,21 @@ router.get('/userlist', (req, res) => { // 返回用户关系
     })
 })
 
+router.get('/chat', (req, res) => { // 返回用户聊天列表
+    const username = req.cookies.us
+    SQL.sqlStr(`select content, time, userid from chat_msg
+                where chatid in 
+                (select id from chat_root 
+                where userid = 
+                (select id from user where username = ?) 
+                or
+                anotherid = (select id from user where username = ?))
+                `, [username, username]).then(data => {
+        console.log(data)
+        res.json(data)
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
 module.exports = router;

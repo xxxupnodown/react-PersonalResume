@@ -49,13 +49,13 @@
 }
 
 @keyframes showPersonal {
-    from {transform: scale(0); top:0;}
-    to {transform: scale(1); top: 50px;}
+    from {transform: scale(0); top:0; z-index: 1000;}
+    to {transform: scale(1); top: 50px; z-index: 1000;}
 }
 
 @keyframes hiddenPersonal {
-    from {transform: scale(1); top: 50px;}
-    to {transform: scale(0); top:0;}
+    from {transform: scale(1); top: 50px; z-index: 1000;}
+    to {transform: scale(0); top:0; z-index: 1000;}
 }
 
 .showPersonal {

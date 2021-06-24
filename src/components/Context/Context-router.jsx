@@ -1,5 +1,5 @@
 import React, { Component, lazy, Suspense} from 'react'
-import {Route, Redirect, Switch, Router} from 'react-router-dom'
+import {Route, Redirect, Switch } from 'react-router-dom'
 import Load from '../Load/Load'
 
 const Resume = lazy(() => import('./Resume'))
