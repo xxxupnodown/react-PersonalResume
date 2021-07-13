@@ -24,13 +24,13 @@
 }
 
 .personalDetail .personalRight span {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 20px !important;
+    font-weight: 600 !important;
 }
 
 .personalDetail .personalRight p {
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 17px !important;
+    font-weight: 600 !important;
 }
 
 .personalDetail .personalRight:nth-last-child() {
@@ -43,7 +43,7 @@
 }
 
 .personalDetail .personalRight textarea {
-    width: 450px;
-    height: 60px;
-    resize: none;
+    width: 450px !important;
+    height: 60px !important;
+    resize: none !important;
 }

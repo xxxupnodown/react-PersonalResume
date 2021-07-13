@@ -9,6 +9,8 @@ var path = require('path')
 
 const readFile = new FILE()
 
+router.use('/', express.static('public')) // /personal url下 打开public访问权限
+
 router.post('/', async (req, res) => {  //  个人主页
     const username = req.cookies.us
     // 查表 nick sex 等
@@ -63,27 +65,70 @@ router.post('/upload', (req, res) => {
 
 router.get('/userlist', (req, res) => { // 返回用户关系
     const username = req.cookies.us
-    SQL.sqlStr(`select friendid from user_relation 
-                where groupid = 1 and userid=(select id from user where username = ?)`, [username]).then((err, data) => {
-        if (err) res.send(err)
-        else res.json(data)
+    SQL.sqlStr(`
+        select ur.userid as my_user_id,
+        u.username as friend_username,
+        u.name as friend_nickname,
+        u.header_pic as friend_header_pic,
+        u.id as friend_id
+        from user_relation ur
+        left join user u
+        on u.id = ur.friendid
+        where groupid = 1 and
+        ur.userid = (select id from user 
+            where username = ?);
+    `, [username]).then((data) => {
+        res.json(data)
+    }).catch(err => {
+        res.json(CONST.sqlError(err))
     })
 })
 
-router.get('/chat', (req, res) => { // 返回用户聊天列表
+router.get('/chat', async (req, res) => { // 返回用户聊天列表
+    res.setHeader('Connection', 'keep-alive')
     const username = req.cookies.us
-    SQL.sqlStr(`select content, time, userid from chat_msg
-                where chatid in 
-                (select id from chat_root 
-                where userid = 
-                (select id from user where username = ?) 
-                or
-                anotherid = (select id from user where username = ?))
-                `, [username, username]).then(data => {
-        console.log(data)
-        res.json(data)
+    try {
+        let sqlResult = await SQL.sqlStr(`
+                select
+                cr.id as chat_root_id,
+                cr.userid as owner_id,
+                cr.anotherid as other_id,
+                u.username as user_username,
+                u.name as user_nickname,
+                u.id as user_id,
+                u.header_pic as user_header_pic
+                from chat_root cr
+                left join user u
+                on cr.userid = u.id or cr.anotherid = u.id
+                where cr.userid = (select id from user where username = ?)
+                or cr.anotherid = (select id from user where username = ?)
+        `, [username, username])
+
+        res.json(CONST.data(sqlResult))
+    } catch {
+        res.json(CONST.sqlError('catch a error on SQL'))
+    }
+})
+
+router.post('/chat/getmsg', (req, res) => {
+    const chat_root_id = req.body.chat_root_id * 1
+    const username = req.cookies.us
+    SQL.sqlStr(`
+        select cm.userid as chat_userid,
+        cm.time, cm.read as state,
+        u.username as chat_username,
+        cm.content as chat_content,
+        u.header_pic as user_header_pic
+        from chat_msg cm
+        left join chat_root cr
+        on cr.id = cm.chatid
+        left join user u
+        on u.id = cm.userid
+        where cm.chatid = ?
+    `, [chat_root_id]).then(data => {
+        res.json(CONST.data(data))
     }).catch(err => {
-        console.log(err)
+        res.json(CONST.sqlError(err))
     })
 })
 

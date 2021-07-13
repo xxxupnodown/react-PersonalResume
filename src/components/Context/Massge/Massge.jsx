@@ -1,22 +1,71 @@
-import React from 'react'
-
-import { Layout, Menu, Row, Col } from 'antd'
-import { SolutionOutlined , CommentOutlined } from '@ant-design/icons';
-import 'antd/dist/antd.css'
-
-import axios from 'axios'
 import './Massge.css'
+import 'antd/dist/antd.css'
+//web socket
+import io from 'socket.io-client'
+import axios from 'axios'
 
+import React, {Fragment} from 'react'
+
+import { Layout, Menu, Row, Col, Button } from 'antd'
+import { SolutionOutlined,
+    CommentOutlined,
+    SmileOutlined } from '@ant-design/icons';
 const { Content, Sider } = Layout;
 
+
+
+
 export default function Massge() {
+
+    const parseCookie = (str) => {
+        const temp = str.split(";")
+        const map = new Map()
+        for (let i = 0; i < temp.length; i++) {
+            temp[i].trim()
+            const key = temp[i].split('=')[0]
+            const value = temp[i].split('=')[1]
+            map.set(key, value)
+        }
+        return map
+    }
+
+    const map = parseCookie(document.cookie) //获取cookie
+    const username = map.get(' us') // 截取cookie
 
     const icnoChat = React.useRef(null)
     const icnoFriend = React.useRef(null)
 
-    React.useEffect(() => {
-        icnoChat.current.className += ' active'
+    const [user, setUser] = React.useState([])
+    const [msg, setMsg] = React.useState([])
+    const [chatid, setChatid] = React.useState()
+    // React.useEffect(() => {
+    //     // icnoChat.current.className += ' active'
+    //     // axios({
+    //     //     method: 'get',
+    //     //     url: 'http://localhost:3000/personal/chat',
+    //     //     withCredentials: true
+    //     // }).then(data => {
+    //     //     if (data.data.err) window.location.href = 'http://localhost:81/login/dl'
+    //     //     else if (data.data.sqlErr) alert('q网络不好稍后访问！')
+            
+    //     //     let result = data.data.data // user_username user_nickname user_header_pic chat_root_id ohter_id owner_id user_id
+    //     //     setUser({chat: result})
+    
+    //     // }).catch(err => {
+    //     //     console.log(err)
+    //     // })
 
+    //     return () => {
+    //         socketio.onclose()
+    //     }
+    // }, [user])
+
+    const chatClick = () => {
+        if (icnoChat.current.className.indexOf('active') !== -1) return
+        icnoChat.current.className += ' active'
+        icnoFriend.current.className = icnoFriend.current.className.replace(/ active/g, '')
+
+        
         axios({
             method: 'get',
             url: 'http://localhost:3000/personal/chat',
@@ -24,26 +73,54 @@ export default function Massge() {
         }).then(data => {
             if (data.data.err) window.location.href = 'http://localhost:81/login/dl'
             else if (data.data.sqlErr) alert('q网络不好稍后访问！')
-            console.log(data)
+            
+            let result = data.data.data // user_username user_nickname user_header_pic chat_root_id ohter_id owner_id user_id
+            setUser({chat: result})
+    
         }).catch(err => {
             console.log(err)
         })
 
-        return () => {
-
-        }
-    })
-
-    const chatClick = () => {
-        if (icnoChat.current.className.indexOf('active') !== -1) return
-        icnoChat.current.className += ' active'
-        icnoFriend.current.className = icnoFriend.current.className.replace(/ active/g, '')
     }
 
     const friendClick = () => {
         if (icnoFriend.current.className.indexOf('active') !== -1) return
         icnoFriend.current.className += ' active'
         icnoChat.current.className = icnoFriend.current.className.replace(/ active/g, '')
+
+        // 请求信息
+        axios({
+            method: 'get',
+            url: 'http://localhost:3000/personal/userlist',
+            withCredentials: true
+        }).then(data => {
+            if (data.data.err) window.location.href = 'http://localhost:81/login/dl'
+            else if (data.data.sqlErr) alert('q网络不好稍后访问！')
+
+            const friendArr = data.data   // friend_header_pic 头像  friend_id friend_nickname friend_username my_user_id
+            setUser({friend: friendArr})
+        }).catch(err => {
+            if (err.sqlErr) alert('sqlErr!')
+            else alert('q网络不好请稍后再试')
+        })
+    }
+
+    const getMsgDetail = (e) => {
+        const chat_root_id = e.key * 1
+
+        axios({
+            method: 'post',
+            url: 'http://localhost:3000/personal/chat/getmsg',
+            withCredentials: true,
+            data: {
+                chat_root_id: chat_root_id
+            }
+        }).then(data => {
+            if (data.data.err) window.location.href = 'http://localhost:81/login/dl'
+            else if (data.data.sqlErr) alert('q网络不好稍后访问！')
+            setMsg(data.data)
+            setChatid(chat_root_id)
+        })
     }
 
     return (
@@ -52,7 +129,6 @@ export default function Massge() {
             style={{
                 overflow: 'auto',
                 maxHeight: '600px',
-                overflow: 'auto',
                 borderRadius: '10px 0 0 10px',
                 minHeight: '600px',
             }}
@@ -75,20 +151,105 @@ export default function Massge() {
                 <Col onClick={chatClick} ref={icnoChat} style={{color: 'white', textAlign: 'center'}} span={12}><CommentOutlined /></Col>
                 <Col onClick={friendClick} ref={icnoFriend} style={{color: 'white', textAlign: 'center'}} span={12}><SolutionOutlined /></Col>
             </Row>
-            <Menu theme="dark" mode="inline" >  {/*defaultSelectedKeys={['1']}*/}
-                <Menu.Item key="1" className="layout_user" icon={<img className="chat_haeder" src="./aijianli.jpg" alt="test" />}>
-                nav 1
-                </Menu.Item>
-                <Menu.Item key="2" className="layout_user" >
-                nav 2
-                </Menu.Item>
+            <Menu theme="dark" mode="inline" >
+                {
+                    user.chat ? user.chat.map((v, index) => {
+                        let pictrue = 'http://localhost:3000' + v.user_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+                        if (v.user_username === username) return null
+                        else return (
+                            <Menu.Item onClick={getMsgDetail} key={v.chat_root_id} other_user_id={v.other_user_id} chat_root_id={v.chat_root_id} className="layout_user" icon={<img className="chat_haeder" src={pictrue} alt="user_header_pic" />}>
+                                {v.user_nickname}
+                            </Menu.Item>
+                        )
+                    }) : null
+                }
+                {
+                    user.friend ? user.friend.map((v, index) => {
+                        let pictrue = 'http://localhost:3000' + v.friend_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+                        return (
+                            <Menu.Item key={v.friend_id} friend_id={v.friend_id} friend_username={v.friend_username} className="layout_user" icon={<img className="chat_haeder" src={pictrue} alt="user_header_pic" />}>
+                                {v.friend_nickname}
+                            </Menu.Item>
+                        )
+                    }) : null
+                }
             </Menu>
             </Sider>
             <Layout className="site-layout">
-            <Content style={{ padding: '20px', overflow: 'initial' , maxHeight: '600px', overflow: 'auto', backgroundColor: '#12121212', borderRadius: '0 20px 20px 0'}}>
-                内容
-            </Content>
+                <ChatMassage myUsername = {username} msg = {msg} chatid = {chatid}/>
             </Layout>
         </Layout>
+    )
+}
+
+
+function ChatMassage(props) { // 每个用户聊天内容
+    let [data, setData] = React.useState()
+    setTimeout(() => {
+        setData(props.msg.data)
+    })
+    let {myUsername} = props // 当前用户username
+    let msg = props.msg.data // 聊天数据 chat_content chat_userid chat_username state time user_header_pic
+    let {chatid} = props
+
+    React.useEffect(() => {
+
+    }, [])
+
+    let socketio = io('ws://localhost:3000')
+
+    socketio.on('putMsg', (data) => {
+        console.log(data)
+        if (data.data.sqlErr) {
+            alert('q网络不好稍后访问！');
+            return
+        }
+        // setData(data.data)
+        data = data.data
+        setData(data)
+    })
+
+    const chatContent = React.useRef(null)
+
+    React.useEffect(() => {
+
+        return () => {
+            socketio.onclose()
+        }
+    })
+
+    const submitMsg = () => {
+        if (typeof(chatid) !== 'number') return
+        if (chatContent.current.value === '' || chatContent.current.value === null || chatContent.current.value === undefined) return
+        socketio.emit('getMsg', {id: chatid, content: chatContent.current.value, username: myUsername})
+        chatContent.current.value = ''
+    }
+
+    return (
+        <Fragment>
+            <Content style={{ padding: '40px 40px 5px 40px', maxHeight: '430px', overflow: 'auto', backgroundColor: '#12121212', borderRadius: '0 20px 0 0'}}>
+                {
+                    
+                
+                    data ? data.map((v, index) => {
+                        let pictrue = 'http://localhost:3000' + v.user_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+                        if (v.chat_username === myUsername) {
+                            return (
+                                <div key={index} className='contaierMsg' src = {pictrue}><div className="rightMsg">{v.chat_content}</div></div>
+                            )
+                        } else {
+                            return (
+                                <div key={index} className='contaierMsg'><img className='contaierPic' src = {pictrue} alt='header_pic' /><div className="leftMsg">{v.chat_content}</div></div>
+                            )
+                        }
+                    }) : null
+                }
+            </Content>
+            <div style={{backgroundColor: '#11111103', height: '170px', borderRadius: '0 0 20px 0', padding: '10px 30px 10px 30px', position: 'relative'}}>
+                <p className='input_title'><SmileOutlined /></p>
+                <textarea ref={chatContent} className='inputMsg'></textarea>
+                <Button onClick={submitMsg} className='input_submit'>发送</Button>
+            </div>
+        </Fragment>
     )
 }

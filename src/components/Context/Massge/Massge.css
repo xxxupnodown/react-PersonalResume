@@ -11,6 +11,7 @@
 .layout_user {
     height: 50px !important;
 }
+
 #components-layout-demo-fixed-sider .logo {
     height: 32px;
     margin: 16px;
@@ -18,6 +19,58 @@
 }
 .site-layout .site-layout-background {
     background: #fff;
+}
+
+.input_title {
+    padding: 0 30px 0 0;
+    margin: 0 0 10px 0;
+}
+.inputMsg {
+    width: 730px;
+    height:110px;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+    resize: none;
+}
+.input_submit {
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    border-radius: 15px;
+}
+
+.contaierMsg {
+    margin: 5px;
+    clear: both;
+    padding: 15px 10px 15px 10px;
+}
+
+.leftMsg {
+    float: left;
+    background-color: white;
+    border-radius: 5px;
+    max-width: 300px;
+    padding: 5px 10px 5px 10px;
+}
+
+.contaierPic {
+    float: left;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    background-color: violet;
+    margin-right: 10px;
+}
+
+.rightMsg {
+    float: right;
+    clear:both;
+    background-color: rgb(98, 212, 64);
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    max-width: 300px;
 }
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/

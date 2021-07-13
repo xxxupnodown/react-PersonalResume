@@ -16,9 +16,9 @@
 }
 
 .resume span {
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: 500;
-    margin-top: 5px;
+    margin-top: 0;
     border: 2px solid #ffffff00;
 }
 
