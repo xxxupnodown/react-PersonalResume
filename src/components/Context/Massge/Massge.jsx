@@ -1,9 +1,7 @@
 import './Massge.css'
 import 'antd/dist/antd.css'
-//web socket
-import io from 'socket.io-client'
 import axios from 'axios'
-
+import io from 'socket.io-client'
 import React, {Fragment} from 'react'
 
 import { Layout, Menu, Row, Col, Button } from 'antd'
@@ -12,9 +10,7 @@ import { SolutionOutlined,
     SmileOutlined } from '@ant-design/icons';
 const { Content, Sider } = Layout;
 
-
-
-
+let socketio
 export default function Massge() {
 
     const parseCookie = (str) => {
@@ -30,7 +26,9 @@ export default function Massge() {
     }
 
     const map = parseCookie(document.cookie) //获取cookie
-    const username = map.get(' us') // 截取cookie
+    const username = map.get('us') // 截取cookie
+
+    if (!username) window.location.href = 'http://localhost:81/login/dl'
 
     const icnoChat = React.useRef(null)
     const icnoFriend = React.useRef(null)
@@ -184,63 +182,172 @@ export default function Massge() {
 
 
 function ChatMassage(props) { // 每个用户聊天内容
+    if (!socketio) {
+        socketio = io('ws://localhost:3000')
+    }
     let [data, setData] = React.useState()
-    setTimeout(() => {
-        setData(props.msg.data)
-    })
+
     let {myUsername} = props // 当前用户username
     let msg = props.msg.data // 聊天数据 chat_content chat_userid chat_username state time user_header_pic
     let {chatid} = props
 
     React.useEffect(() => {
-
-    }, [])
-
-    let socketio = io('ws://localhost:3000')
+        let tempdata = props.msg.data
+        if (tempdata) {
+            tempdata = tempdata.sort((temp, v) => {
+                return temp.time > v.time ? 1 : -1
+            })
+        } else return 
+        setData(tempdata)
+        setTimeout(() => {
+            document.querySelector('#msgContent').scrollTo(0, document.querySelector('#msgContent').scrollHeight)
+        });
+        return () => {
+            socketio.onclose()
+        }
+    }, props.msg.data)
 
     socketio.on('putMsg', (data) => {
-        console.log(data)
         if (data.data.sqlErr) {
             alert('q网络不好稍后访问！');
             return
         }
         // setData(data.data)
         data = data.data
+        data = data.sort((temp, v) => {
+            return temp.time > v.time ? 1 : -1
+        })
         setData(data)
+        document.querySelector('#msgContent').scrollTo(0, document.querySelector('#msgContent').scrollHeight)
     })
 
     const chatContent = React.useRef(null)
 
-    React.useEffect(() => {
-
-        return () => {
-            socketio.onclose()
-        }
-    })
-
-    const submitMsg = () => {
+    const submitMsg = () => {  // 提交
         if (typeof(chatid) !== 'number') return
         if (chatContent.current.value === '' || chatContent.current.value === null || chatContent.current.value === undefined) return
+        
         socketio.emit('getMsg', {id: chatid, content: chatContent.current.value, username: myUsername})
+        console.log(chatid, chatContent.current.value, myUsername)
         chatContent.current.value = ''
+    }
+
+    
+
+    const msgHasTime = (v, index, place) => {  // 包含时间信息
+        let pictrue = 'http://localhost:3000' + v.user_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+        if (place === 'left') {
+            return(
+                <Fragment>
+                    <div key={new Date().getTime()} className = 'centerMsg' >
+                        {v.time} 
+                    </div>
+                    <div key={index} className='contaierMsg'><img className='contaierPic' src = {pictrue} alt='header_pic' />
+                        <div className={place + 'Msg f' + place}>
+                            {v.chat_content}
+                        </div>
+                    </div>
+                </Fragment>
+            )
+        }
+        else {
+            return (
+                <Fragment>
+                    <div key={new Date().getTime()} className = 'centerMsg' >
+                        {v.time} 
+                    </div>
+                    <div key={index} className='contaierMsg'>
+                        <div className={place + 'Msg f' + place}>
+                            {v.chat_content}
+                        </div>
+                    </div>
+                </Fragment>
+            )
+        }
+    }
+
+    const msgNotTime = (v, index, place) => { // 不包含时间信息
+        let pictrue = 'http://localhost:3000' + v.user_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+        if (place === 'left') {
+            return(
+                <Fragment>
+                    <div key={index} className='contaierMsg'><img className='contaierPic' src = {pictrue} alt='header_pic' />
+                        <div className={place + 'Msg f' + place}>
+                            {v.chat_content}
+                        </div>
+                    </div>
+                </Fragment>
+            )
+        }
+        else {
+            return (
+                <Fragment>
+                    <div key={index} className='contaierMsg'>
+                        <div className={place + 'Msg f' + place}>
+                            {v.chat_content}
+                        </div>
+                    </div>
+                </Fragment>
+            )
+        }
+    }
+
+    const parseTime = (date) => { // 处理时间
+        let vdate = date.split(' ')[0]
+        ,vtime = date.split(' ')[1]
+        ,vyear = parseInt(vdate.split('-')[0])
+        ,vmonth = parseInt(vdate.split('-')[1])
+        ,vday = parseInt(vdate.split('-')[2])
+        ,vhour = parseInt(vtime.split(':')[0])
+        ,vminute = parseInt(vtime.split(':')[1])
+        ,vsecond = parseInt(vtime.split(':')[2])
+        return [vyear, vmonth, vday, vhour, vminute, vsecond]
     }
 
     return (
         <Fragment>
-            <Content style={{ padding: '40px 40px 5px 40px', maxHeight: '430px', overflow: 'auto', backgroundColor: '#12121212', borderRadius: '0 20px 0 0'}}>
+            <Content id = 'msgContent' style={{ padding: '0 40px 15px 40px', maxHeight: '430px', overflow: 'auto', backgroundColor: '#12121212', borderRadius: '0 20px 0 0'}}>
                 {
-                    
-                
                     data ? data.map((v, index) => {
-                        let pictrue = 'http://localhost:3000' + v.user_header_pic.replace(/\\/g, '/').slice(15,) // 更改图片地址为请求地址
+                        let dateArr = parseTime(v.time)
                         if (v.chat_username === myUsername) {
-                            return (
-                                <div key={index} className='contaierMsg' src = {pictrue}><div className="rightMsg">{v.chat_content}</div></div>
-                            )
+                            if (index === 0) {
+                                return msgHasTime(v, index, 'right')   // 时区 相差 8 小时
+                            } else {
+                                let tempDateArr = parseTime(data[index - 1].time)
+                                if (dateArr[0] !== tempDateArr[0]) { // 判断当前信息与上条信息年份是否相同
+                                    return msgHasTime(v, index, 'right')
+                                } else if (dateArr[1] !== tempDateArr[1]) {
+                                    return msgHasTime(v, index, 'right')
+                                } else if (dateArr[2] !== tempDateArr[2]) {
+                                    return msgHasTime(v, index, 'right')
+                                } else if (dateArr[3] !== tempDateArr[3]) {
+                                    return msgHasTime(v, index, 'right')
+                                } else if (Math.abs(dateArr[4] - tempDateArr[4]) > 5) {
+                                    return msgHasTime(v, index, 'right')
+                                } else {
+                                    return msgNotTime(v, index, 'right')
+                                }
+                            }
                         } else {
-                            return (
-                                <div key={index} className='contaierMsg'><img className='contaierPic' src = {pictrue} alt='header_pic' /><div className="leftMsg">{v.chat_content}</div></div>
-                            )
+                            if (index === 0) {
+                                return msgHasTime(v, index, 'left')   // 时区 相差 8 小时
+                            } else {
+                                let tempDateArr = parseTime(data[index - 1].time)
+                                if (dateArr[0] !== tempDateArr[0]) { // 判断当前信息与上条信息年份是否相同
+                                    return msgHasTime(v, index, 'left')
+                                } else if (dateArr[1] !== tempDateArr[1]) {
+                                    return msgHasTime(v, index, 'left')
+                                } else if (dateArr[2] !== tempDateArr[2]) {
+                                    return msgHasTime(v, index, 'left')
+                                } else if (dateArr[3] !== tempDateArr[3]) {
+                                    return msgHasTime(v, index, 'left')
+                                } else if (Math.abs(dateArr[4] - tempDateArr[4]) > 8) {
+                                    return msgHasTime(v, index, 'left')
+                                } else {
+                                    return msgNotTime(v, index, 'left')
+                                }
+                            }
                         }
                     }) : null
                 }

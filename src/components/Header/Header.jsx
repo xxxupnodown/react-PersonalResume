@@ -18,7 +18,7 @@ export default class Content extends Component {
 
         
         const map = this.parseCookie(document.cookie) //获取cookie
-        const username = map.get(' us') // 截取cookie
+        const username = map.get('us') // 截取cookie
         if (username) this.setState({login: true, user: username})
         else this.setState({login: false, user: ''})
 
@@ -26,7 +26,7 @@ export default class Content extends Component {
         
         this.listenCookie = setInterval(() => {
             const map = this.parseCookie(document.cookie)
-            const username = map.get(' us')
+            const username = map.get('us')
 
             if (username) this.setState({login: true, user: username}) // 判断cookie修改用户名
             else this.setState({login: false, user: ''}) // 

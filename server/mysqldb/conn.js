@@ -5,7 +5,8 @@ const options = {
     port: "3306",
     user: "why",
     password: "why",
-    database: "aijianli"
+    database: "aijianli",
+    dateStrings : true
 }
 
 let conn = mysql.createConnection(options)
@@ -13,6 +14,8 @@ let conn = mysql.createConnection(options)
 conn.connect((err) => {
     if (err) console.log(err)
 })
+
+conn.query('set time_zone = "+8:00"');
 
 module.exports.sqlStr = (query, arr) => {
     return new Promise((resolve, reject) => {
